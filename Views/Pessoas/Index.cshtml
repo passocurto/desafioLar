@@ -1,0 +1,54 @@
+﻿@model IEnumerable<desafioLar.Models.Pessoa>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1> Lista de Pessoas Cadastradas </h1>
+
+<p>
+    <a asp-action="Create">Criar</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Nome
+            </th>
+            <th>
+                CPF
+            </th>
+            <th>
+                Data de Nacimento
+            </th>
+            <th>
+                Ativo
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.nmNome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.nmCPF)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.dtNascimento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.flAtivo)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdPessoa">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.IdPessoa">Detalhes</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdPessoa">Deletar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
