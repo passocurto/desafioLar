@@ -54,7 +54,7 @@ namespace desafioLar.Controllers.Api
                 db.Add(pessoa);
                 db.SaveChanges();
 
-                return CreatedAtAction(nameof(GetPessoaById), new { id = pessoa.IdPessoa }, pessoa);
+                return CreatedAtAction(nameof(GetPessoaById), new { id = pessoa.idPessoa }, pessoa);
             }
             catch (Exception ex)
             {
@@ -73,12 +73,12 @@ namespace desafioLar.Controllers.Api
                 db.Entry(pessoa).State = EntityState.Modified;
                 await db.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetPessoaById), new { id = pessoa.IdPessoa }, pessoa);
+                return CreatedAtAction(nameof(GetPessoaById), new { id = pessoa.idPessoa }, pessoa);
 
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PessoaExists(pessoa.IdPessoa))
+                if (!PessoaExists(pessoa.idPessoa))
                 {
                     return NotFound();
                 }
@@ -107,7 +107,7 @@ namespace desafioLar.Controllers.Api
 
         private bool PessoaExists(int id)
         {
-            return db.Pessoa.Any(e => e.IdPessoa == id);
+            return db.Pessoa.Any(e => e.idPessoa == id);
         }
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using desafioLar.Data;
 using desafioLar.Models;
@@ -21,14 +16,23 @@ namespace desafioLar.Controllers
             db = context;
         }
 
-        // GET: Pessoas
+        [HttpGet]
+        [Route("Pessoas/Index")]
         public async Task<IActionResult> Index()
         {
-              return db.Pessoa != null ? 
-                          View(await db.Pessoa.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Pessoa'  is null.");
+            return View(await db.Pessoa.ToListAsync());
         }
 
+        [HttpGet]
+        [Route("Pessoas/Create")]
+        public IActionResult Create()
+        {
+            return View("Create");
+        }
+
+
+        [HttpGet("{id}")]
+        [Route("Pessoas/Details")]
         // GET: Pessoas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -38,33 +42,19 @@ namespace desafioLar.Controllers
             }
 
             var pessoa = await db.Pessoa
-                .FirstOrDefaultAsync(m => m.IdPessoa == id);
-            if (pessoa == null)
-            {
-                return NotFound();
-            }
-
+                .FirstOrDefaultAsync(m => m.idPessoa == id);
+            
             return View(pessoa);
         }
 
-        // GET: Pessoas/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
+
+
 
         // POST: Pessoas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdPessoa,nmNome,nmCPF,dtNascimento,flAtivo")] Pessoa pessoa)
+        [Route("Pessoas/Create")]
+        public async Task<IActionResult> Create([Bind("IdPessoa,nmNome,nmCPF,dtNascimento,flAtivo, Telefones")] Pessoa pessoa)
         {
-
-            //Telefone tl = new Telefone();
-            //tl.nmNumero = "123456789";
-            //tl.Tipo = "1";
-            //pessoa.Telefones.Add(tl);
 
             if (ModelState.IsValid)
             {
@@ -73,22 +63,20 @@ namespace desafioLar.Controllers
                     db.Add(pessoa);
                     await db.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
-                }catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     throw (ex);
                 }
             }
-            return View(pessoa);
+            return View("Index");
         }
 
         // GET: Pessoas/Edit/5
+        [HttpGet("{id}")]
+        [Route("Pessoas/Edit")]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || db.Pessoa == null)
-            {
-                return NotFound();
-            }
-
             var pessoa = await db.Pessoa.FindAsync(id);
             if (pessoa == null)
             {
@@ -98,13 +86,11 @@ namespace desafioLar.Controllers
         }
 
         // POST: Pessoas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [Route("Pessoas/Edit")]
         public async Task<IActionResult> Edit(int id, [Bind("IdPessoa,nmNome,nmCPF,dtNascimento,flAtivo")] Pessoa pessoa)
         {
-            if (id != pessoa.IdPessoa)
+            if (id != pessoa.idPessoa)
             {
                 return NotFound();
             }
@@ -118,7 +104,7 @@ namespace desafioLar.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PessoaExists(pessoa.IdPessoa))
+                    if (!PessoaExists(pessoa.idPessoa))
                     {
                         return NotFound();
                     }
@@ -133,6 +119,8 @@ namespace desafioLar.Controllers
         }
 
         // GET: Pessoas/Delete/5
+        [HttpDelete("{id}")]
+        [Route("Pessoas/Delete")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || db.Pessoa == null)
@@ -141,18 +129,18 @@ namespace desafioLar.Controllers
             }
 
             var pessoa = await db.Pessoa
-                .FirstOrDefaultAsync(m => m.IdPessoa == id);
+                .FirstOrDefaultAsync(m => m.idPessoa == id);
             if (pessoa == null)
             {
                 return NotFound();
             }
 
             return View(pessoa);
-        }
+        }   
 
         // POST: Pessoas/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpPost]
+        [Route("Pessoas/Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (db.Pessoa == null)
@@ -171,7 +159,7 @@ namespace desafioLar.Controllers
 
         private bool PessoaExists(int id)
         {
-          return (db.Pessoa?.Any(e => e.IdPessoa == id)).GetValueOrDefault();
+          return (db.Pessoa?.Any(e => e.idPessoa == id)).GetValueOrDefault();
         }
     }
 }

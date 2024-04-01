@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace desafioLar.Models
 {
@@ -13,6 +14,7 @@ namespace desafioLar.Models
 
         public Pessoa(string nmNome, string nmCPF, DateTime dtNascimento, bool flAtivo, List<Telefone> telefone )
         {
+            this.idPessoa = 0;
             this.nmNome = nmNome;
             this.nmCPF = nmCPF;
             this.dtNascimento = dtNascimento;
@@ -21,23 +23,25 @@ namespace desafioLar.Models
         }
 
         [Key]
-        public int IdPessoa { get; set; }
+        public int idPessoa { get; set; }
         public string nmNome { get; set; }
         public string nmCPF { get; set; }
         public DateTime dtNascimento { get; set; }
         public bool flAtivo { get; set; }
-
-        public List<Telefone> Telefones { get; set; }
+       public List<Telefone> Telefones { get; set; }
     }
 
     public class Telefone
     {
         [Key]
-        public int IdTelefone { get; set; }
-        public string Tipo { get; set; }
-        public string nmNumero { get; set; }
-        public int IdPessoa { get; set; }
+        public int idTelefone { get; set; }
+        public string flTipo { get; set; }
+        public string nmNumero { get; set;
+        }
+        [ForeignKey("Pessoa")]
+        public int idPessoa { get; set; }
         public Pessoa Pessoa { get; set; }
+
     }
 
 }

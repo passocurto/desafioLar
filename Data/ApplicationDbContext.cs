@@ -12,6 +12,7 @@ namespace desafioLar.Data
         {
         }
         public DbSet<desafioLar.Models.Pessoa>? Pessoa { get; set; }
+        public DbSet<desafioLar.Models.Telefone>? Telefone { get; set; }
 
         internal ActionResult<Pessoa> Find(Func<object, bool> value)
         {

@@ -9,7 +9,7 @@
 
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 mx-auto">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -24,7 +24,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="dtNascimento" class="control-label">Data de Nascimento</label>
-                <input asp-for="dtNascimento" class="form-control" asp-format="{0:dd/MM/yy}" />
+                <input asp-for="dtNascimento" class="form-control" type="date" />
                 <span asp-validation-for="dtNascimento" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -32,12 +32,47 @@
                     <input class="form-check-input" asp-for="flAtivo" /> Ativo
                 </label>
             </div>
-            <div class="form-group">
+
+            <div class="form-group m-0">
+                <label for="telefones">Telefones</label>
+                <div id="telefones">
+                    <div class="telefone form-group">
+                        <input type="tel" class="form-control telefones" name="Telefones[0].nmNumero" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="Número de Telefone">
+                        <select class="form-control mt-1" name="Telefones[0].flTipo">
+                            <option value="residencial">Residencial</option>
+                            <option value="celular">Celular</option>
+                            <option value="comercial">Comercial</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" id="addTelefone">Adicionar Telefone</button>
+            </div>
+
+            <div class="form-group mt-1">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
+
+<script>
+    document.getElementById('addTelefone').addEventListener('click', function () {
+        var telefonesContainer = document.getElementById('telefones');
+        var telefoneIndex = telefonesContainer.children.length;
+        var telefoneDiv = document.createElement('div');
+        telefoneDiv.classList.add('telefone', 'form-group', 'mb-1', 'mx-auto');
+        telefoneDiv.innerHTML = `
+                    <input type="tel" class="form-control telefone mt-1" name="Telefones[${telefoneIndex}].nmNumero" placeholder="Número de Telefone">
+                                <select class="form-control mt-1" name="Telefones[${telefoneIndex}].flTipo">
+                    <option value="residencial">Residencial</option>
+                    <option value="celular">Celular</option>
+                    <option value="comercial">Comercial</option>
+                </select>`;
+        telefonesContainer.appendChild(telefoneDiv);
+    });
+
+</script>
+
 
 <div>
     <a asp-action="Index">Voltar para lista</a>

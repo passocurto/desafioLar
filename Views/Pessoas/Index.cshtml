@@ -8,7 +8,7 @@
 <h1> Lista de Pessoas Cadastradas </h1>
 
 <p>
-    <a asp-action="Create">Criar</a>
+    <a asp-controller="Pessoas" asp-action="Create">Criar</a>
 </p>
 <table class="table">
     <thead>
@@ -44,9 +44,9 @@
                 @Html.DisplayFor(modelItem => item.flAtivo)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdPessoa">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.IdPessoa">Detalhes</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdPessoa">Deletar</a>
+                <a asp-action="Edit" asp-route-id="@item.idPessoa">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.idPessoa">Detalhes</a> |
+                <a asp-action="Delete" asp-route-id="@item.idPessoa">Deletar</a>
             </td>
         </tr>
 }
