@@ -7,14 +7,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using desafioLar.Data;
 using desafioLar.Models;
-using System.Net;
-using NuGet.Protocol;
-using System.Collections;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Microsoft.Extensions.Options;
 
 namespace desafioLar.Controllers.Api
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/PessoasApi")]
     public class PessoasApiController : Controller
     {
         private readonly ApplicationDbContext db;
@@ -25,83 +25,89 @@ namespace desafioLar.Controllers.Api
         }
 
         // GET: api/pessoas
-        [HttpGet]
-        public async Task<ActionResult<List<Pessoa>>> Index()
+        [Route("Index")]
+        public async Task<ActionResult<string>> Index()
         {
-            return db.Pessoa != null ?
-                        (await db.Pessoa.ToListAsync()).ToList() :
-                        NotFound();
+
+            ICollection<Pessoa> ListPessoa = await db.Pessoa
+                                                   .Include(p => p.Telefones)
+                                                   .ToListAsync();
+
+            return new JsonResult(ListPessoa);
+                        
         }
 
         // GET: api/pessoas/5
-        [HttpGet("{id}")]
+        [HttpGet("GetPessoaById/{id}")]
         public async Task<ActionResult<Pessoa>> GetPessoaById(int id)
         {
-            Pessoa? people =  db.Pessoa != null && id != 0 ?
-                            (await db.Pessoa.FindAsync(id)) :
-                            null;
+            Pessoa? person =  await db.Pessoa
+                                    .Include(p => p.Telefones.Select(t => new { t.idPessoa, t.idTelefone, t.nmNumero, t.flTipo }))
+                                    .Where(p => p.idPessoa == id)
+                                    .FirstOrDefaultAsync();
 
-            return people;
+            return new JsonResult(person);
         }
 
-
-        [HttpPost]
-        public ActionResult<Pessoa> CreatePessoa(Pessoa pessoa)
+        [HttpPost("Pessoa")]
+        [Route("Create")]
+        public IActionResult CreatePessoa([FromBody] dynamic jsonData)
         {
             try
             {
 
-                db.Add(pessoa);
+                var person = JsonSerializer.Deserialize<Pessoa>(jsonData);
+                db.Add(person);
                 db.SaveChanges();
 
-                return CreatedAtAction(nameof(GetPessoaById), new { id = pessoa.idPessoa }, pessoa);
+               
+                return new JsonResult(CreatedAtAction(nameof(GetPessoaById), new { id = person.idPessoa }, person));
             }
             catch (Exception ex)
             {
-                // Em caso de erro, retorna um código de erro 400 BadRequest com uma mensagem
-                return BadRequest($"Erro ao criar pessoa: {ex.Message}");
+                return new JsonResult(BadRequest($"Erro ao criar pessoa: {ex.Message}"));
             }
         }
 
 
-        [HttpPut]
-        public async Task<ActionResult> UpdatePessoa(Pessoa pessoa)
+        
+        [HttpPut("Pessoa")]
+        [Route("UpdatePessoa")]
+        public async Task<ActionResult> UpdatePessoa([FromBody] dynamic jsonData)
         {
             
             try
             {
-                db.Entry(pessoa).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                Pessoa person = JsonSerializer.Deserialize<Pessoa>(jsonData);
+                db.Entry(person).State = EntityState.Modified;
+                db.SaveChanges();
 
-                return CreatedAtAction(nameof(GetPessoaById), new { id = pessoa.idPessoa }, pessoa);
+                return new JsonResult(CreatedAtAction(nameof(GetPessoaById), new { id = person.idPessoa }, person));
 
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PessoaExists(pessoa.idPessoa))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return new JsonResult(BadRequest("Erro ao Atualizar a Pessoa:"));
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("DeletePessoa/{id}")]
         public async Task<ActionResult> DeletePessoa(int id)
         {
-            var pessoa = await db.Pessoa.FindAsync(id);
+            var pessoa = await db.Pessoa
+                                .Include(p => p.Telefones)
+                                .Where(p => p.idPessoa == id)
+                                .FirstOrDefaultAsync();
+
             if (pessoa == null)
             {
-                return NotFound();
+                return new JsonResult(BadRequest("Pessoa não encontrada"));
             }
 
             db.Pessoa.Remove(pessoa);
             await db.SaveChangesAsync();
 
-            return Ok("Pessoa removida com sucesso.");
+            return new JsonResult(Ok("Pessoa removida com sucesso."));
         }
 
 

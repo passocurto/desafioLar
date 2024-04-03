@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace desafioLar.Models
 {
@@ -24,22 +25,35 @@ namespace desafioLar.Models
 
         [Key]
         public int idPessoa { get; set; }
+
+        [Required]
         public string nmNome { get; set; }
+
+        [Required]
         public string nmCPF { get; set; }
+
         public DateTime dtNascimento { get; set; }
         public bool flAtivo { get; set; }
-       public List<Telefone> Telefones { get; set; }
+
+        public ICollection<Telefone> Telefones { get; set; } = new List<Telefone>();
     }
 
     public class Telefone
     {
         [Key]
         public int idTelefone { get; set; }
+        
+        [Required]
         public string flTipo { get; set; }
-        public string nmNumero { get; set;
-        }
+        
+        [Required]
+        public string nmNumero { get; set; }
+
+        [Required]
         [ForeignKey("Pessoa")]
         public int idPessoa { get; set; }
+
+        [JsonIgnore]
         public Pessoa Pessoa { get; set; }
 
     }

@@ -17,14 +17,14 @@ namespace desafioLar.Controllers
         }
 
         [HttpGet]
-        [Route("Pessoas/Index")]
+        [Route("Index")]
         public async Task<IActionResult> Index()
         {
-            return View(await db.Pessoa.ToListAsync());
+            return View(await db.Pessoa.Include(p => p.Telefones).ToListAsync());
         }
 
         [HttpGet]
-        [Route("Pessoas/Create")]
+        [Route("Create")]
         public IActionResult Create()
         {
             return View("Create");
@@ -32,7 +32,7 @@ namespace desafioLar.Controllers
 
 
         [HttpGet("{id}")]
-        [Route("Pessoas/Details")]
+        [Route("Details")]
         // GET: Pessoas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -52,8 +52,8 @@ namespace desafioLar.Controllers
 
         // POST: Pessoas/Create
         [HttpPost]
-        [Route("Pessoas/Create")]
-        public async Task<IActionResult> Create([Bind("IdPessoa,nmNome,nmCPF,dtNascimento,flAtivo, Telefones")] Pessoa pessoa)
+        [Route("Create")]
+        public async Task<IActionResult> Create([Bind("idPessoa,nmNome,nmCPF,dtNascimento,flAtivo, Telefones")] Pessoa pessoa)
         {
 
             if (ModelState.IsValid)
@@ -74,7 +74,7 @@ namespace desafioLar.Controllers
 
         // GET: Pessoas/Edit/5
         [HttpGet("{id}")]
-        [Route("Pessoas/Edit")]
+        [Route("Edit")]
         public async Task<IActionResult> Edit(int? id)
         {
             var pessoa = await db.Pessoa.FindAsync(id);
@@ -87,7 +87,7 @@ namespace desafioLar.Controllers
 
         // POST: Pessoas/Edit/5
         [HttpPost]
-        [Route("Pessoas/Edit")]
+        [Route("Edit")]
         public async Task<IActionResult> Edit(int id, [Bind("IdPessoa,nmNome,nmCPF,dtNascimento,flAtivo")] Pessoa pessoa)
         {
             if (id != pessoa.idPessoa)
@@ -120,7 +120,7 @@ namespace desafioLar.Controllers
 
         // GET: Pessoas/Delete/5
         [HttpDelete("{id}")]
-        [Route("Pessoas/Delete")]
+        [Route("Delete")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || db.Pessoa == null)
@@ -140,7 +140,7 @@ namespace desafioLar.Controllers
 
         // POST: Pessoas/Delete/5
         [HttpPost]
-        [Route("Pessoas/Delete")]
+        [Route("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (db.Pessoa == null)
