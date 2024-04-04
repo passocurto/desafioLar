@@ -1,9 +1,48 @@
 ﻿<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
 
 <script>
-    $(document).ready(function () {
-        $('#nmCPF').mask('000.000.000-00', { reverse: true });
-    });
+
+        $(document).ready(function () {
+
+            $("input[type='tel']").mask("(99) 9999-9999");
+        
+            $('#addTelefone').click(function () {
+                let telefonesContainer = $('#telefones');
+                let telefoneIndex = telefonesContainer.children().length;
+
+                let telefoneDiv = $('<div>').addClass('telefone form-group mb-1 mx-auto');
+                telefoneDiv.html(`
+                   <input type="tel"  onkeyup="handlePhone(event)" id="Telefones[${telefoneIndex}]" class="telefone form-control mt-1" name="Telefones[${telefoneIndex}].nmNumero" placeholder="Número de Telefone">
+                  <select class="form-control mt-1" name="Telefones[${telefoneIndex}].flTipo">
+                    <option value="residencial">Residencial</option>
+                    <option value="celular">Celular</option>
+                    <option value="comercial">Comercial</option>
+                  </select>
+                `);
+
+                telefoneDiv.find('input[type="tel"]').mask('(00) 0000-0000');
+
+                telefonesContainer.append(telefoneDiv);
+
+            });
+
+            $('#removerUltimoTelefone').click(function () {
+                let telefonesContainer = $('#telefones');
+                let ultimoTelefone = telefonesContainer.children().last();
+
+                if (ultimoTelefone.length > 0) {
+                    ultimoTelefone.remove();
+                } else {
+                    // não faz nada.
+                }
+            });
+
+            $("#nmCPF").mask("999.999.999-99");
+
+
+        });
+    
 </script>

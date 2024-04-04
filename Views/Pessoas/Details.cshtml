@@ -1,43 +1,64 @@
 ﻿@model desafioLar.Models.Pessoa
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalhes";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
 
-<div>
-    <h4>Pessoa</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            Nome
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.nmNome)
-        </dd>
-        <dt class = "col-sm-2">
-            CPF
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.nmCPF)
-        </dd>
-        <dt class = "col-sm-2">
-            Data de Nascimento
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.dtNascimento)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.flAtivo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.flAtivo)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.idPessoa">Editar</a> |
-    <a asp-action="Index">Volar</a>
+<h1>Detalhes</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Pessoa</h4>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-4">Nome</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.nmNome)</dd>
+                <dt class="col-sm-4">CPF</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.nmCPF)</dd>
+                <dt class="col-sm-4">Data de Nascimento</dt>
+                <dd class="col-sm-8"> @Convert.ToDateTime(Model.dtNascimento).ToString("dd/MM/yyyy") </dd>
+                <dd class="col-sm-4"> Ativo </dd>
+                <dd class="col-sm-8"> @(Model.flAtivo ? "Ativo" : "Desativado") </dd>
+            </dl>
+        </div>
+        <div class="col-md-6">
+            <h4>Telefones</h4>
+            <hr />
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Número</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Telefones.Count > 0)
+                    {
+                        foreach (var telefone in Model.Telefones)
+                        {
+                            <tr>
+                                <td>@telefone.flTipo</td>
+                                <td>@telefone.nmNumero</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="2">Não há telefones cadastrados</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col">
+            <a asp-action="Edit" asp-route-id="@Model?.idPessoa" class="btn btn-primary">Editar</a> |
+            <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+        </div>
+    </div>
 </div>

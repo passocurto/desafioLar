@@ -8,10 +8,10 @@
 <h1>Editar</h1>
 
 <hr />
+<form asp-action="Edit">
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="col-md-6">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="idPessoa" />
             <div class="form-group">
                 <label asp-for="nmNome" class="control-label">Nome</label>
@@ -25,24 +25,53 @@
             </div>
             <div class="form-group">
                 <label asp-for="dtNascimento" class="control-label">Data de Nascimento</label>
-                <input asp-for="dtNascimento" class="form-control" asp-format="{0:dd/MM/yy}" />
+                <input asp-for="dtNascimento" class="form-control" id="dtNascimento" type="date" />
                 <span asp-validation-for="dtNascimento" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
+            <div class="form-group form-check mt-2 mb-2">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="flAtivo" /> Ativo
                 </label>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Voltar</a>
             </div>
-        </form>
+    
     </div>
-</div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="telefones">Telefones</label>
 
-<div>
-    <a asp-action="Index">Voltar</a>
-</div>
+            <div id="telefones">
+
+                @if (Model.Telefones.Count > 0)
+                {
+                    var i = 0;
+                    foreach (var Telefones in Model.Telefones)
+                    {
+                        <div id="telefones">
+                            <input type="tel" class="telefone form-control mt-1" value="@Telefones.nmNumero" name="Telefones[i].nmNumero" placeholder="Número de Telefone">
+                            <select class="form-control mt-1" name="Telefones[0].flTipo">
+                                <option value="residencial" > Residencial</option>
+                                <option value="celular" > Celular</option>
+                                <option value="comercial">Comercial</option>
+                            </select>
+                        </div>
+                        i++;
+                    }
+                }
+
+            </div>
+
+            <button type="button" class="btn btn-secondary mt-2" id="addTelefone">Adicionar Telefone</button>
+            <button id="removerUltimoTelefone" class="btn btn-danger mt-2">Remover Último Telefone</button>
+
+        </div>
+    </div>
+    </div>
+</form>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

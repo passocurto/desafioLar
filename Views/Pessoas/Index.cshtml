@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
 <h1> Lista de Pessoas Cadastradas </h1>
@@ -10,46 +11,48 @@
 <p>
     <a asp-controller="Pessoas" asp-action="Create">Criar</a>
 </p>
-<table class="table">
+<table class="table table-hover" data-toggle="tooltip" data-placement="top">
     <thead>
         <tr>
-            <th>
+            <th class="text-center">
                 #
             </th>
-            <th>
+            <th class="text-center">
                 Nome
             </th>
-            <th>
+            <th class="text-center">
                 CPF
             </th>
-            <th>
+            <th class="text-center">
                 Data de Nacimento
             </th>
-            <th>
+            <th class="text-center">
                 Ativo
             </th>
-            <th></th>
+            <th class="text-center">
+                Ações
+            </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model) {
         <tr>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.idPessoa)
             </td>
-            <td>
+            <td class="text-left">
                 @Html.DisplayFor(modelItem => item.nmNome)
             </td>
-            <td>
+                <td class="text-center">
                 @Html.DisplayFor(modelItem => item.nmCPF)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.dtNascimento)
+            <td class="text-center">
+                @Convert.ToDateTime(item.dtNascimento).ToString("dd/MM/yyyy")
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.flAtivo)
+            <td class="text-center">
+                    @(item.flAtivo ? "Ativo" : "Desativado")
             </td>
-            <td>
+            <td class="text-center">
                 <a asp-action="Edit" asp-route-id="@item.idPessoa">Editar</a> |
                 <a asp-action="Details" asp-route-id="@item.idPessoa">Detalhes</a> |
                 <a asp-action="Delete" asp-route-id="@item.idPessoa">Deletar</a>

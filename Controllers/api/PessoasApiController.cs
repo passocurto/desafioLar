@@ -28,25 +28,40 @@ namespace desafioLar.Controllers.Api
         [Route("Index")]
         public async Task<ActionResult<string>> Index()
         {
+            try
+            {
 
-            ICollection<Pessoa> ListPessoa = await db.Pessoa
+                ICollection<Pessoa> ListPessoa = await db.Pessoa
                                                    .Include(p => p.Telefones)
                                                    .ToListAsync();
 
-            return new JsonResult(ListPessoa);
-                        
+                return new JsonResult(ListPessoa);
+
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest($"Erro GetPessoaById: {ex.Message}"));
+            }
+
         }
 
         // GET: api/pessoas/5
         [HttpGet("GetPessoaById/{id}")]
         public async Task<ActionResult<Pessoa>> GetPessoaById(int id)
         {
-            Pessoa? person =  await db.Pessoa
+            try
+            {
+                Pessoa? person = await db.Pessoa
                                     .Include(p => p.Telefones.Select(t => new { t.idPessoa, t.idTelefone, t.nmNumero, t.flTipo }))
                                     .Where(p => p.idPessoa == id)
                                     .FirstOrDefaultAsync();
 
-            return new JsonResult(person);
+                return new JsonResult(person);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(BadRequest($"Erro GetPessoaById: {ex.Message}"));
+            }
         }
 
         [HttpPost("Pessoa")]
@@ -75,7 +90,6 @@ namespace desafioLar.Controllers.Api
         [Route("UpdatePessoa")]
         public async Task<ActionResult> UpdatePessoa([FromBody] dynamic jsonData)
         {
-            
             try
             {
                 Pessoa person = JsonSerializer.Deserialize<Pessoa>(jsonData);
@@ -94,7 +108,9 @@ namespace desafioLar.Controllers.Api
         [HttpDelete("DeletePessoa/{id}")]
         public async Task<ActionResult> DeletePessoa(int id)
         {
-            var pessoa = await db.Pessoa
+            try
+            {
+                var pessoa = await db.Pessoa
                                 .Include(p => p.Telefones)
                                 .Where(p => p.idPessoa == id)
                                 .FirstOrDefaultAsync();
@@ -108,13 +124,14 @@ namespace desafioLar.Controllers.Api
             await db.SaveChangesAsync();
 
             return new JsonResult(Ok("Pessoa removida com sucesso."));
+
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return new JsonResult(BadRequest("Erro ao Atualizar a Pessoa:"));
+            }
         }
 
-
-        private bool PessoaExists(int id)
-        {
-            return db.Pessoa.Any(e => e.idPessoa == id);
-        }
     }
 }
 

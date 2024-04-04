@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using desafioLar.Data;
 using desafioLar.Models;
+using System;
 
 namespace desafioLar.Controllers
 {
@@ -14,6 +15,25 @@ namespace desafioLar.Controllers
         public PessoasController(ApplicationDbContext context)
         {
             db = context;
+        }
+
+        public async Task<ActionResult<Pessoa>> GetPessoaById(int id)
+        {
+            try
+            {
+
+                Pessoa? person = await db.Pessoa
+                            .Include(p => p.Telefones)
+                            .Where(p => p.idPessoa == id)
+                            .FirstOrDefaultAsync();
+
+                return person;
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Erro GetPessoaById: {ex.Message}");
+            }
         }
 
         [HttpGet]
@@ -34,132 +54,147 @@ namespace desafioLar.Controllers
         [HttpGet("{id}")]
         [Route("Details")]
         // GET: Pessoas/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null || db.Pessoa == null)
+            try
             {
-                return NotFound();
+                if (id == null || db.Pessoa == null)
+                {
+                    return NotFound();
+                }
+
+                var pessoa = await db.Pessoa
+                            .Include(p => p.Telefones)
+                            .Where(p => p.idPessoa == id)
+                            .FirstOrDefaultAsync();
+
+
+                return View(pessoa);
+
             }
-
-            var pessoa = await db.Pessoa
-                .FirstOrDefaultAsync(m => m.idPessoa == id);
-            
-            return View(pessoa);
+            catch (Exception ex)
+            {
+                return BadRequest($"Erro GetPessoaById: {ex.Message}");
+            }
         }
-
-
-
 
         // POST: Pessoas/Create
         [HttpPost]
         [Route("Create")]
         public async Task<IActionResult> Create([Bind("idPessoa,nmNome,nmCPF,dtNascimento,flAtivo, Telefones")] Pessoa pessoa)
         {
-
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    db.Add(pessoa);
-                    await db.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (Exception ex)
-                {
-                    throw (ex);
-                }
+                db.Add(pessoa);
+                await db.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            return View("Index");
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
         }
 
         // GET: Pessoas/Edit/5
         [HttpGet("{id}")]
         [Route("Edit")]
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var pessoa = await db.Pessoa.FindAsync(id);
-            if (pessoa == null)
+            try
             {
-                return NotFound();
-            }
-            return View(pessoa);
-        }
+                var pessoa = await db.Pessoa
+                                .Include(p => p.Telefones)
+                                .Where(p => p.idPessoa == id)
+                                .FirstOrDefaultAsync();
 
+                if (pessoa == null)
+                {
+                    return NotFound();
+                }
+
+                return View(pessoa);
+
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
+        
         // POST: Pessoas/Edit/5
         [HttpPost]
         [Route("Edit")]
-        public async Task<IActionResult> Edit(int id, [Bind("IdPessoa,nmNome,nmCPF,dtNascimento,flAtivo")] Pessoa pessoa)
+        public async Task<IActionResult> Edit(int id, [Bind("IdPessoa,nmNome,nmCPF,dtNascimento,flAtivo,Telefones")] Pessoa pessoa)
         {
-            if (id != pessoa.idPessoa)
+            try
             {
-                return NotFound();
-            }
+                db.Update(pessoa);
+                await db.SaveChangesAsync();
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    db.Update(pessoa);
-                    await db.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PessoaExists(pessoa.idPessoa))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
                 return RedirectToAction(nameof(Index));
+                
             }
-            return View(pessoa);
+            catch (Exception ex) 
+            {
+                    throw (ex);
+            }
         }
 
         // GET: Pessoas/Delete/5
         [HttpDelete("{id}")]
         [Route("Delete")]
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null || db.Pessoa == null)
+            try 
             {
-                return NotFound();
-            }
+                var pessoa  = await db.Pessoa
+                            .Include(p => p.Telefones)
+                            .Where(p => p.idPessoa == id)
+                            .FirstOrDefaultAsync(); ;
 
-            var pessoa = await db.Pessoa
-                .FirstOrDefaultAsync(m => m.idPessoa == id);
-            if (pessoa == null)
+                if (pessoa == null)
+                {
+                    return NotFound();
+                }
+
+                return View(pessoa);
+
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                throw (ex);
             }
-
-            return View(pessoa);
-        }   
+        }
 
         // POST: Pessoas/Delete/5
-        [HttpPost]
-        [Route("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpPost("{id}")]
+        [Route("DeleteConfirmed")]
+        public async Task<IActionResult> DeleteConfirmed(int idPessoa)
         {
-            if (db.Pessoa == null)
+            try
             {
-                return Problem("Entity set 'ApplicationDbContext.Pessoa'  is null.");
-            }
-            var pessoa = await db.Pessoa.FindAsync(id);
-            if (pessoa != null)
-            {
-                db.Pessoa.Remove(pessoa);
-            }
+                if (db.Pessoa == null)
+                {
+                    return Problem("Entity set 'ApplicationDbContext.Pessoa'  is null.");
+                }
+
+                var person = await db.Pessoa.FindAsync(idPessoa);
+
+                if (person != null)
+                {
+                    db.Pessoa.Remove(person);
+                }
             
-            await db.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+                await db.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
         }
 
-        private bool PessoaExists(int id)
-        {
-          return (db.Pessoa?.Any(e => e.idPessoa == id)).GetValueOrDefault();
-        }
     }
 }
