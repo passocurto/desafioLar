@@ -71,7 +71,8 @@ Detalhes do Registro
 
 /api/pessoasApi/UpdatePessoa
 
-![image](https://github.com/passocurto/desafioLar/assets/1081320/14a7d022-e0b6-4ac0-994d-5a9ca9ca28ef)
+![image](https://github.com/passocurto/desafioLar/assets/1081320/b5ca2804-9df8-4577-80f4-91f72352cb99)
+
 
 /api/pessoasApi/DeletePessoa/35
 
