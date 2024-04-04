@@ -35,7 +35,7 @@ O projeto está estruturado da seguinte forma:
 Contribuições são bem-vindas! Sinta-se à vontade para abrir uma issue ou enviar um pull request com melhorias, correções de bugs ou novas funcionalidades.
 
 ## Autores
-Este projeto foi desenvolvido por [Seu Nome] como parte do desafio para a vaga de desenvolvedor de software.
+Este projeto foi desenvolvido por @passocurto.
 
 ## Licença
 Este projeto está licenciado sob a [Licença MIT](LICENSE).
