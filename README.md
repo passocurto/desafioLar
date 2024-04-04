@@ -10,7 +10,7 @@ Este projeto consiste na implementação de uma aplicação em .NET Core com uma
 
 ## Funcionalidades
 - **Operações de CRUD**: A aplicação permite criar, visualizar, atualizar e excluir registros das entidades fornecidas.
-- **Persistência de Dados**: Implementa uma forma de persistência dos dados, permitindo que sejam armazenados em memória durante a execução da aplicação ou em um banco de dados.
+- **Persistência de Dados**: Implementa uma forma de persistência dos dados, permitindo que sejam armazenados em um banco de dados.
 - **Interface Web**: Inclui uma interface web para visualização e interação com os dados, proporcionando uma experiência amigável ao usuário.
 
 ## Como Executar o Projeto
