@@ -39,3 +39,49 @@ Este projeto foi desenvolvido por @passocurto.
 
 ## Licença
 Este projeto está licenciado sob a [Licença MIT](LICENSE).
+
+
+## Aplicação
+![image](https://github.com/passocurto/desafioLar/assets/1081320/8f597e04-6e3e-4e64-b02c-d58913b4597e)
+
+
+Cadastro
+![image](https://github.com/passocurto/desafioLar/assets/1081320/cf5120ec-cd71-447c-b2d8-313dd18c8905)
+
+Edição 
+![image](https://github.com/passocurto/desafioLar/assets/1081320/03868ace-0aa8-4096-aade-e69314c710f4)
+
+Exclusão
+![image](https://github.com/passocurto/desafioLar/assets/1081320/678d9def-0a40-4dbc-afa4-0ae450bb9c3b)
+
+
+Detalhes do Registro
+![image](https://github.com/passocurto/desafioLar/assets/1081320/cce9892f-eecf-4dc2-a95e-3b765dd09036)
+
+
+## API
+
+/api/PessoasApi/Index
+
+![image](https://github.com/passocurto/desafioLar/assets/1081320/7182bc70-0938-4d1e-8156-e48850d02178)
+
+/api/PessoasApi/Create
+
+![image](https://github.com/passocurto/desafioLar/assets/1081320/3f2e5caa-da4e-4438-9e4b-27aa8e64760b)
+
+/api/pessoasApi/UpdatePessoa
+
+![image](https://github.com/passocurto/desafioLar/assets/1081320/14a7d022-e0b6-4ac0-994d-5a9ca9ca28ef)
+
+/api/pessoasApi/DeletePessoa/35
+
+![image](https://github.com/passocurto/desafioLar/assets/1081320/16c9977f-f96b-4e8f-aa25-4655ded67128)
+
+
+
+
+
+
+
+
+
