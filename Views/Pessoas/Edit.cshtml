@@ -51,8 +51,10 @@
                     foreach (var Telefones in Model.Telefones)
                     {
                         <div id="telefones">
-                            <input type="tel" class="telefone form-control mt-1" value="@Telefones.nmNumero" name="Telefones[i].nmNumero" placeholder="Número de Telefone">
-                            <select class="form-control mt-1" name="Telefones[0].flTipo">
+                            <input type="number" class="d-none" value="@Telefones.idPessoa" name="Telefones[@i].idPessoa" />
+                            <input type="number" class="d-none" value="@Telefones.idTelefone" name="Telefones[@i].idTelefone" />
+                            <input type="tel" class="telefone form-control mt-1" value="@Telefones.nmNumero" name="Telefones[@i].nmNumero" placeholder="Número de Telefone">
+                            <select class="form-control mt-1" name="Telefones[@i].flTipo">
                                 <option value="residencial" > Residencial</option>
                                 <option value="celular" > Celular</option>
                                 <option value="comercial">Comercial</option>

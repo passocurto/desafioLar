@@ -13,9 +13,9 @@ namespace desafioLar.Models
             Telefones = new List<Telefone>();
         }
 
-        public Pessoa(string nmNome, string nmCPF, DateTime dtNascimento, bool flAtivo, List<Telefone> telefone )
+        public Pessoa(int idPessoa, string nmNome, string nmCPF, DateTime dtNascimento, bool flAtivo, List<Telefone> telefone )
         {
-            this.idPessoa = 0;
+            this.idPessoa = idPessoa;
             this.nmNome = nmNome;
             this.nmCPF = nmCPF;
             this.dtNascimento = dtNascimento;

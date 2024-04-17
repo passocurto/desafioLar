@@ -124,7 +124,7 @@ namespace desafioLar.Controllers
         // POST: Pessoas/Edit/5
         [HttpPost]
         [Route("Edit")]
-        public async Task<IActionResult> Edit(int id, [Bind("IdPessoa,nmNome,nmCPF,dtNascimento,flAtivo,Telefones")] Pessoa pessoa)
+        public async Task<IActionResult> Edit(int id, [Bind("idPessoa,nmNome,nmCPF,dtNascimento,flAtivo,Telefones")] Pessoa pessoa)
         {
             try
             {
@@ -178,7 +178,10 @@ namespace desafioLar.Controllers
                     return Problem("Entity set 'ApplicationDbContext.Pessoa'  is null.");
                 }
 
-                var person = await db.Pessoa.FindAsync(idPessoa);
+                var person = await db.Pessoa
+                      .Include(p => p.Telefones)
+                      .Where(p => p.idPessoa == idPessoa)
+                      .FirstOrDefaultAsync(); ;
 
                 if (person != null)
                 {
